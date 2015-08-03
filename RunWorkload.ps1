@@ -10,6 +10,7 @@
         Version    Who          When           What
         --------------------------------------------------------------------------------------------------
         0.0.1      MLavery      29/05/2015     Initial Coding
+        0.0.2      MLavery      03/08/2015     Minor fixes (issue #1) removal of Write-Host
         
         DISCLAIMER
         This Sample Code is provided for the purpose of illustration only and is not intended to be 
@@ -67,8 +68,8 @@ param (
 
 Clear-Host
 
-Write-Host "SQL Workload Generator"
-Write-Host "Starting..."
+Write-Output "SQL Workload Generator"
+Write-Output "Starting..."
 
 # Load the SMO assembly 
 [void][reflection.assembly]::LoadWithPartialName("Microsoft.SqlServer.Smo"); 
@@ -106,13 +107,13 @@ if ($TSQLSetupFile.Length -gt 0)
         # Disconnect from the server 
         $srv.ConnectionContext.Disconnect(); 
 
-        Write-Host "Setup Script Executed"
+        Write-Output "Setup Script Executed"
     
     }
     catch
     {
-        #uncomment for debugging
-        Write-Host "Setup Script Failed"
+        #Write an error
+        Write-Error "Setup Script Failed"
         #throw $_;
         Exit; # stop the script execution
     }
@@ -145,34 +146,30 @@ WHILE(1 -eq 1)
             $srv.ConnectionContext.Password = $Password;
         }
 
-        #Write-Output $Query;
-
         # Execute the query with ExecuteNonQuery 
         $result = $srv.ConnectionContext.ExecuteNonQuery($Query); 
 
         # Disconnect from the server 
         $srv.ConnectionContext.Disconnect(); 
 
-        Write-Host "Query Executed ($($LoopCount))"
+        Write-Output "Query Executed ($($LoopCount))"
+        Write-Verbose "`$Query = $($Query)";
     
     }
     catch
     {
-        #uncomment for debugging
-        Write-Host "Failed to execute:"
-        Write-Host "`$Query = $($Query)";
+        #Use Verbose for troubleshooting
+        Write-Verbose "Failed to execute:"
+        Write-Verbose "`$Query = $($Query)";
         #throw $_;
     }
     finally
     {
-        # Sleep for 100 miliseconds between loops 
-        #Start-Sleep -Milliseconds 100 
-
         #Wait for a random delay to make this more realistic when running multiple workloads
-        $SleepMilSecs = Get-Random -Minimum 100 -Maximum 5000
+        $SleepMilSecs = Get-Random -Minimum 10 -Maximum 5000
         Start-Sleep -Milliseconds $SleepMilSecs
     }
 
 } 
 
-Write-Host "Done..."
+Write-Output "Done..."
