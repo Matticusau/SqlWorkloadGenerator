@@ -4,13 +4,14 @@
         Script:     RunWorkload.ps1
         Author:     Matt Lavery (https://github.com/Matticusau/SqlWorkloadGenerator)
         Created:    29/05/2015
-        Version:    0.0.1
+        Version:    0.0.3
     
         Change History
         Version    Who          When           What
         --------------------------------------------------------------------------------------------------
         0.0.1      MLavery      29/05/2015     Initial Coding
         0.0.2      MLavery      03/08/2015     Minor fixes (issue #1) removal of Write-Host
+        0.0.3      MLavery      10/08/2015     Added Frequency parameter
         
         DISCLAIMER
         This Sample Code is provided for the purpose of illustration only and is not intended to be 
@@ -63,7 +64,11 @@ param (
 
     # The path to the TSQL file which contains the setup statements to execute before starting the process (if required).
     [parameter(mandatory=$false)]
-    [string]$TSQLSetupFile
+    [string]$TSQLSetupFile,
+
+    # The frequency of which to run the statements at
+    [parameter(mandatory=$false)]
+    [string][ValidateSet("Fast", "Normal", "Slow")]$Frequency = "Normal"
 )
 
 Clear-Host
@@ -73,9 +78,6 @@ Write-Output "Starting..."
 
 # Load the SMO assembly 
 [void][reflection.assembly]::LoadWithPartialName("Microsoft.SqlServer.Smo"); 
-
-# Set the server to run the workload against
-#$ServerName = "azureessentials.database.windows.net"; 
 
 # Run the setup file if supplied
 if ($TSQLSetupFile.Length -gt 0)
@@ -166,7 +168,11 @@ WHILE(1 -eq 1)
     finally
     {
         #Wait for a random delay to make this more realistic when running multiple workloads
-        $SleepMilSecs = Get-Random -Minimum 10 -Maximum 5000
+        if ($Frequency = "Fast") {$SleepMilSecs = Get-Random -Minimum 1 -Maximum 500}
+        elseif ($Frequency = "Slow") {$SleepMilSecs = Get-Random -Minimum 1000 -Maximum 5000}
+        else {$SleepMilSecs = Get-Random -Minimum 100 -Maximum 5000};
+        
+        Write-Verbose "Waiting for $($SleepMilSecs) milliseconds";
         Start-Sleep -Milliseconds $SleepMilSecs
     }
 
