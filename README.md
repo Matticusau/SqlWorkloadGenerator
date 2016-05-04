@@ -1,3 +1,5 @@
+[![Build status](https://ci.appveyor.com/api/projects/status/54s91yyoc7n70ceh/branch/master?svg=true)](https://ci.appveyor.com/project/Matticusau/sqlworkloadgenerator/branch/master)
+
 # SqlWorkloadGenerator
 PowerShell scripts to general SQL Server workload against AdventureWorks database schemas
 
