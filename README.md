@@ -20,6 +20,17 @@ Set-Location C:\WorkLoad
 To run a larger workload you may need to execute this script multiple times. To achieve this create a .cmd file with multiple lines such as:
 Start PowerShell.exe -File "C:\Workload\RunWorkload.ps1" -SQLServer "SqlServer.contoso.com" -Database "DemoDB01" -TSQLFile "C:\Workload\AdventureWorks2012BOLWorkload.sql" -Frequency "Fast"
 
+## PowerShell Execution Policies
+
+As this workload is generated through a PowerShell script, it is not excempt from PowerShell Execution Policies. The default policy is Restricted which will stop you from executing the workload script. In production environments it is not recommended to set this to Unrestricted, instead you should use RemoteSigned or AllSigned and then code sign the script files with your organisations certificate.
+
+As a workaround you could run the workload script from a .cmd file with the PowerShell.exe -ExecutionPolicy parameter set to RemoteSigned or as appropriate. This will only change the policy for the process and still allow you to execute the workload. However, if your policy is set through Group Policy then this will not take effect.
+Start PowerShell.exe -ExecutionPolicy RemoteSigned -File "C:\Workload\RunWorkload.ps1" -SQLServer "SqlServer.contoso.com" -Database "DemoDB01" -TSQLFile "C:\Workload\AdventureWorks2012BOLWorkload.sql" -Frequency "Fast"
+
+For further information see:
+Get-Help about_Execution_Policies
+https://technet.microsoft.com/en-au/library/hh847748.aspx  
+
 ## Versions
 
 ### 0.0.3
