@@ -5,7 +5,7 @@
         Author:     Matt Lavery (https://github.com/Matticusau/SqlWorkloadGenerator)
         Created:    29/05/2015
         Version:    0.1.1
-    
+            
         Change History
         Version    Who          When           What
         --------------------------------------------------------------------------------------------------
@@ -14,6 +14,7 @@
         0.0.3      MLavery      10/08/2015     Added Frequency parameter
         0.1.0      MLavery      04/05/2016     Added functions Invoke-Workload, Invoke-WorkloadSetup, Invoke-WorkloadQuery (Issue6)
         0.1.1      MLavery      05/05/2016     Added Duration parameter and better error verbatim (Issue4)
+        0.1.2      MLavery      05/05/2016     Moved functions to a module for better code coverage
 
         DISCLAIMER
         This Sample Code is provided for the purpose of illustration only and is not intended to be 
