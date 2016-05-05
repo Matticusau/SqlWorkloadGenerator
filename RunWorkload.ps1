@@ -85,7 +85,7 @@ Write-Output "Starting..."
 
 Import-Module .\RunWorkload
 
-Invoke-SqlWorkload -SQLServer $SQLServer -Database $Database -UserName $UserName -Password $Password -TSQLFile $TSQLFile -TSQLSetupFile $TSQLSetupFile -Frequency $Frequency -Duration $Duration;
+Invoke-SqlWorkload -SQLServer $SQLServer -Database $Database -UserName $UserName -Password $Password -TSQLFile $TSQLFile -TSQLSetupFile $TSQLSetupFile -Frequency $Frequency -Duration $Duration -Verbose;
 
 Write-Output "Done..."
 
