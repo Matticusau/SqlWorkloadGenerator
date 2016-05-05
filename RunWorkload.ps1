@@ -159,8 +159,9 @@ function Invoke-WorkloadQuery
     catch
     {
         #Use Verbose for troubleshooting
-        Write-Verbose "Failed to execute:"
-        Write-Verbose "`$Query = $($Query)";
+        Write-Verbose "Failed to execute: $($Query)";
+        #we need to go a few levels deep to get the actual exception from sql
+        Write-Verbose "$($psitem.Exception.InnerException.InnerException.Message)";
         #throw $_;
     }
     finally
