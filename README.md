@@ -36,10 +36,36 @@ As a workaround you could run the workload script from a .cmd file with the Powe
 ```
 Start PowerShell.exe -ExecutionPolicy RemoteSigned -File "C:\Workload\RunWorkload.ps1" -SQLServer "SqlServer.contoso.com" -Database "DemoDB01" -TSQLFile "C:\Workload\AdventureWorks2012BOLWorkload.sql" -Frequency "Fast"
 ```
-
 For further information see:
 Get-Help about_Execution_Policies
 https://technet.microsoft.com/en-au/library/hh847748.aspx  
+
+## Parameters
+
+### SQLServer
+The SQL Server host name and instance to connect to (e.g. Server01\Prd01)
+
+### Database
+The name of the database to run the script against. This allows for restoring the AdventureWorks database schema to custom databases.
+
+### UserName
+If SQL Authentication is required this is the UserName to authenticate with. If not provided then Windows Auth is used.
+
+### Password
+If SQL Authentication is required this is the Password to authenticate with. Not required for Windows Auth.
+Warning: This is currently stored in plain text
+
+### TSQLFile
+The path to the TSQL file which contains the sample statements to execute.
+
+### TSQLSetupFile
+The path to the TSQL file which contains the setup statements to execute before starting the process (if required).
+
+### Frequency
+The frequency of which to run the statements at (Fast, Normal, or Slow)
+
+### Duration
+The duration to run the workload for (seconds). 0 is unlimited, otherwise maximum allowed is 172800 (48hrs) 
 
 ## Versions
 
