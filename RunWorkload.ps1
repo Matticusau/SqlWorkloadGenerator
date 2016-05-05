@@ -4,7 +4,7 @@
         Script:     RunWorkload.ps1
         Author:     Matt Lavery (https://github.com/Matticusau/SqlWorkloadGenerator)
         Created:    29/05/2015
-        Version:    0.1.0
+        Version:    0.1.1
     
         Change History
         Version    Who          When           What
@@ -12,8 +12,9 @@
         0.0.1      MLavery      29/05/2015     Initial Coding
         0.0.2      MLavery      03/08/2015     Minor fixes (issue #1) removal of Write-Host
         0.0.3      MLavery      10/08/2015     Added Frequency parameter
-        0.1.0      MLavery      04/05/2016     Added functions Invoke-Workload, Invoke-WorkloadSetup, Invoke-WorkloadQuery
-        
+        0.1.0      MLavery      04/05/2016     Added functions Invoke-Workload, Invoke-WorkloadSetup, Invoke-WorkloadQuery (Issue6)
+        0.1.1      MLavery      05/05/2016     Added Duration parameter and better error verbatim (Issue4)
+
         DISCLAIMER
         This Sample Code is provided for the purpose of illustration only and is not intended to be 
         used in a production environment.  THIS SAMPLE CODE AND ANY RELATED INFORMATION ARE PROVIDED 
@@ -43,7 +44,7 @@
 
 [cmdletbinding()]
 param (
-    # The SQL Server host name and instance to connect to
+    # The SQL Server host name and instance to connect to (e.g. Server01\Prd01)
     [Parameter(Mandatory=$true)]
     [string]$SQLServer,
     
@@ -67,9 +68,13 @@ param (
     [Parameter(Mandatory=$false)]
     [string]$TSQLSetupFile,
 
-    # The frequency of which to run the statements at
+    # The frequency of which to run the statements at (Fast, Normal, or Slow)
     [Parameter(Mandatory=$false)]
-    [string][ValidateSet("Fast", "Normal", "Slow")]$Frequency = "Normal"
+    [string][ValidateSet("Fast", "Normal", "Slow")]$Frequency = "Normal",
+
+    # The duration to run the workload for (seconds). 0 is unlimited, otherwise maximum allowed is 172800 (48hrs) 
+    [parameter(mandatory=$false)]
+    [int64][ValidateRange(0,172800)]$Duration = 0
 )
 
 Clear-Host
@@ -80,6 +85,9 @@ function Invoke-Workload
     [CmdLetBinding()]
     Param()
 
+    # set the start time
+    $startTime = Get-Date;
+
     # Split the input on the delimeter 
     $queries = Get-Content -Delimiter "----Query----" -Path $TSQLFile #"AdventureWorks2012BOLWorkload.sql" 
 
@@ -89,7 +97,14 @@ function Invoke-Workload
     {
         # increment the count
         $loopCount = $loopCount + 1;
-    
+        
+        # check if we have exceeded the timespan for execution
+        if ($Duration -gt 0 -and ((New-TimeSpan -Start $startTime -End (Get-Date)).Seconds -ge $Duration))
+        {
+            Write-Verbose "Duration of $Duration seconds reached";
+            Break;
+        }
+        
         try
         {
             # Pick a Random Query from the input object 
