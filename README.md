@@ -69,6 +69,19 @@ The duration to run the workload for (seconds). 0 is unlimited, otherwise maximu
 
 ## Versions
 
+### 0.1.2
+
+* Moved functions to a module for better code coverage
+* Improved test coverage through AppVeyor
+
+### 0.1.1
+
+* Added Duration parameter and better error verbatim (Issue4)
+
+### 0.1.0
+
+* Added functions Invoke-Workload, Invoke-WorkloadSetup, Invoke-WorkloadQuery (Issue6)
+
 ### 0.0.3
 
 * Added ability to specify frequency for improved control over workload level

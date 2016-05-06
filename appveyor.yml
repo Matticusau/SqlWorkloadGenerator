@@ -1,0 +1,44 @@
+#---------------------------------# 
+#      environment configuration  # 
+#---------------------------------# 
+version: 1.2.{build}.0
+install: 
+  - cinst -y pester
+  - git clone https://github.com/PowerShell/DscResource.Tests
+  - ps: Push-Location
+  - cd DscResource.Tests
+  - ps: Import-Module .\TestHelper.psm1 -force
+  - ps: Pop-Location
+
+#---------------------------------# 
+#      build configuration        # 
+#---------------------------------# 
+
+build: false
+
+#---------------------------------# 
+#      test configuration         # 
+#---------------------------------# 
+
+test_script:
+    - ps: |
+        $testResultsFile = ".\TestsResults.xml"
+        $res = Invoke-Pester -OutputFormat NUnitXml -OutputFile $testResultsFile -PassThru
+        (New-Object 'System.Net.WebClient').UploadFile("https://ci.appveyor.com/api/testresults/nunit/$($env:APPVEYOR_JOB_ID)", (Resolve-Path $testResultsFile))
+        if ($res.FailedCount -gt 0) { 
+            throw "$($res.FailedCount) tests failed."
+        }
+    
+#---------------------------------# 
+#      deployment configuration   # 
+#---------------------------------# 
+
+# scripts to run before deployment 
+deploy_script: 
+  - ps: |
+      # None at this time
+      
+        
+        
+
+
