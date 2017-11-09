@@ -12,7 +12,7 @@
 RootModule = 'RunWorkload.psm1'
 
 # Version number of this module.
-ModuleVersion = '1.0.0.0'
+ModuleVersion = '1.1.0.0'
 
 # ID used to uniquely identify this module
 GUID = 'cd04fe86-97b8-473b-b104-b8e8040df9fe'
