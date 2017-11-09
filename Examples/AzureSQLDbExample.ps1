@@ -1,7 +1,7 @@
 ﻿<#
     .NOTES
         
-        Script:     Example_RunWorkload.ps1
+        Script:     AzureSqlDbExample.ps1
         Author:     Matt Lavery (https://github.com/Matticusau/SqlWorkloadGenerator)
         Created:    29/05/2015
         Version:    0.0.1
@@ -10,6 +10,7 @@
         Version    Who          When           What
         --------------------------------------------------------------------------------------------------
         0.0.1      MLavery      29/05/2015     Initial Coding
+        0.0.2      MLavery      09/11/2017     Renamed from Example_RunWorkload.ps1 to AzureSQLDbExample.ps1
 
         DISCLAIMER
         This Sample Code is provided for the purpose of illustration only and is not intended to be 

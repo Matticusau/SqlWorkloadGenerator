@@ -4,7 +4,7 @@
         Script:     RunWorkload.ps1
         Author:     Matt Lavery (https://github.com/Matticusau/SqlWorkloadGenerator)
         Created:    29/05/2015
-        Version:    0.1.1
+        Version:    0.1.2
             
         Change History
         Version    Who          When           What

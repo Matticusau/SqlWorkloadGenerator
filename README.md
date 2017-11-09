@@ -9,8 +9,20 @@ Provides sample SQL Scripts and PowerShell scripts to automate the generation of
 Current supported versions are:
 - SQL 2008 / R2
 - SQL 2012
-- SQL 2014 (via 2012 script)
+- SQL 2014
+- SQL 2016
+- SQL 2017
 - SQL Azure
+
+This tool is currently only supported on Windows and PowerShell. It has not yet been tested on PowerShell Core. It will though work remotely against SQL Server on Linux.
+
+NOTE: For SQL Server 2014 and higher, use the non-version specific scripts.
+
+## Installation
+To install and use this toolset follow these steps.
+1. Create a folder *C:\Workload* or other suitable location
+2. Download the project source or one of the releases to that location you just created
+3. Create a wrapper script or start the RunWorkload.ps1 script from the console depending on your needs. Refer to the examples for various ways to execute this workload.
 
 ## Example
 
@@ -21,12 +33,16 @@ Set-Location C:\WorkLoad
 .\RunWorkload.ps1 -SQLServer myazuredb.database.windows.net -Database DemoDB01 -UserName DemoUsr -Password ?????? -TSQLFile C:\WorkLoad\AdventureWorksAzureBOLWorkload.sql -Frequency 'Fast'
 ```
 
+For further examples see the files provided in [.\Examples](Examples\) folder.
+
 ## Running Larger Workloads
 
 To run a larger workload you may need to execute this script multiple times. To achieve this create a .cmd file with multiple lines such as:
 ```
 Start PowerShell.exe -File "C:\Workload\RunWorkload.ps1" -SQLServer "SqlServer.contoso.com" -Database "DemoDB01" -TSQLFile "C:\Workload\AdventureWorks2012BOLWorkload.sql" -Frequency "Fast"
 ```
+
+For an example see the file [.\Examples\LoadTestExample.cmd](Examples\LoadTestExample.cmd)
 
 ## PowerShell Execution Policies
 
@@ -67,32 +83,6 @@ The frequency of which to run the statements at (Fast, Normal, or Slow)
 ### Duration
 The duration to run the workload for (seconds). 0 is unlimited, otherwise maximum allowed is 172800 (48hrs) 
 
-## Versions
+## Change log
+A full list of changes in each version can be found in the [change log](CHANGELOG.md).
 
-### 0.1.2
-
-* Moved functions to a module for better code coverage
-* Improved test coverage through AppVeyor
-
-### 0.1.1
-
-* Added Duration parameter and better error verbatim (Issue4)
-
-### 0.1.0
-
-* Added functions Invoke-Workload, Invoke-WorkloadSetup, Invoke-WorkloadQuery (Issue6)
-
-### 0.0.3
-
-* Added ability to specify frequency for improved control over workload level
-
-### 0.0.2
-
-* Added minor fixes (issue #1) removal of Write-Host
-
-
-### 0.0.1
-
-* Initial release includes basic functionality and sample scripts
-
-    

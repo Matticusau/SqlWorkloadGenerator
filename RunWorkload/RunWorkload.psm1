@@ -2,12 +2,13 @@
         Script:     RunWorkload.psm1
         Author:     Matt Lavery (https://github.com/Matticusau/SqlWorkloadGenerator)
         Created:    05/05/2016
-        Version:    1.0.0.0
+        Version:    1.1.0.0
             
         Change History
         Version      Who          When           What
         --------------------------------------------------------------------------------------------------
         1.0.0.0      MLavery      05/05/2016     Initial Coding from existing scripts (Issue6)
+        1.1.0.0      MLavery      09/11/2017     Better error handling and uses the SQL modules to load assemblies
         
 
         DISCLAIMER
@@ -102,9 +103,9 @@ function Invoke-SqlWorkload
         catch
         {
             #Report the error
-            Write-Warning "Could not execute"
-            Write-Warning "$($_.Exception.Message)";
-            #throw $_;
+            Write-Warning "Could not execute via Invoke-SqlWorkloadQuery"
+            Write-Warning "$($PSItem.Exception.Message)";
+            #throw $PSItem;
         }
         finally
         {
@@ -171,13 +172,23 @@ function Invoke-SqlWorkloadQuery
         Write-Debug "`$Query = $($Query)";
     
     }
+    # SQL Exception
+    catch [System.Data.SqlClient.SqlException],[Microsoft.SqlServer.Management.Common.ExecutionFailureException]
+    {
+        # Use Verbose for troubleshooting
+        Write-Verbose "Failed to execute: $($Query)";
+        # we need to go a few levels deep to get the actual exception from sql
+        Write-Verbose "$($PSItem.Exception.InnerException.InnerException.Message)";
+        # throw $PSItem;
+    }
+    # All Other Exception
     catch
     {
-        #Use Verbose for troubleshooting
+        # Use Verbose for troubleshooting
         Write-Verbose "Failed to execute: $($Query)";
-        #we need to go a few levels deep to get the actual exception from sql
-        Write-Verbose "$($psitem.Exception.InnerException.InnerException.Message)";
-        #throw $_;
+        # General error so just use the exception
+        Write-Verbose "$($PSItem.Exception.Message)";
+        # throw $PSItem;
     }
     finally
     {
@@ -250,11 +261,26 @@ function Invoke-SqlWorkloadSetup
     {
         #Write an error
         Write-Error "Setup Script Failed"
-        #throw $_;
+        #throw $PSItem;
         Exit; # stop the script execution
     }
 }
 
 
 # Load the SMO assembly 
-[void][reflection.assembly]::LoadWithPartialName("Microsoft.SqlServer.Smo"); 
+# [void][reflection.assembly]::LoadWithPartialName("Microsoft.SqlServer.Smo"); 
+# Import the SQL Module to load the assemblies
+if (-not(Get-module -Name SqlServer -ListAvailable -ErrorAction SilentlyContinue))
+{
+    Import-Module -Name SqlServer;
+}
+elseif (-not(Get-module -Name SQLPS -ListAvailable -ErrorAction SilentlyContinue)) 
+{
+    Import-Module -Name SqlServer -DisableNameChecking;
+}
+else 
+{
+    Write-Error "Neither the SqlServer or SQLPS PowerShell Modules are installed"
+    #throw $PSItem;
+    Exit; # stop the script execution
+}
