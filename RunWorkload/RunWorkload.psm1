@@ -270,13 +270,13 @@ function Invoke-SqlWorkloadSetup
 # Load the SMO assembly 
 # [void][reflection.assembly]::LoadWithPartialName("Microsoft.SqlServer.Smo"); 
 # Import the SQL Module to load the assemblies
-if (-not(Get-module -Name SqlServer -ListAvailable -ErrorAction SilentlyContinue))
+if ($null -ne (Get-module -Name SqlServer -ListAvailable -ErrorAction SilentlyContinue))
 {
     Import-Module -Name SqlServer;
 }
-elseif (-not(Get-module -Name SQLPS -ListAvailable -ErrorAction SilentlyContinue)) 
+elseif ($null -ne (Get-module -Name SQLPS -ListAvailable -ErrorAction SilentlyContinue)) 
 {
-    Import-Module -Name SqlServer -DisableNameChecking;
+    Import-Module -Name SQLPS -DisableNameChecking;
 }
 else 
 {
