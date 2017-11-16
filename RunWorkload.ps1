@@ -83,7 +83,14 @@ Clear-Host
 Write-Output "SQL Workload Generator"
 Write-Output "Starting..."
 
-Import-Module .\RunWorkload
+[string]$workloadModulePath = ".\RunWorkload"
+if (-not(Test-Path -Path workloadModulePath))
+{
+    Write-Output "Cannot find RunWorkload module at path '$($workloadModulePath)'";
+    $workloadModulePath = Read-Host -prompt "Please enter path to '.\RunWorkload' Module included with this toolset"; 
+}
+
+Import-Module $workloadModulePath
 
 Invoke-SqlWorkload -SQLServer $SQLServer -Database $Database -UserName $UserName -Password $Password -TSQLFile $TSQLFile -TSQLSetupFile $TSQLSetupFile -Frequency $Frequency -Duration $Duration -Verbose;
 
