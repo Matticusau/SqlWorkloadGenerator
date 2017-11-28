@@ -84,7 +84,7 @@ Write-Output "SQL Workload Generator"
 Write-Output "Starting..."
 
 [string]$workloadModulePath = ".\RunWorkload"
-if (-not(Test-Path -Path workloadModulePath))
+if (-not(Test-Path -Path $workloadModulePath))
 {
     Write-Output "Cannot find RunWorkload module at path '$($workloadModulePath)'";
     $workloadModulePath = Read-Host -prompt "Please enter path to '.\RunWorkload' Module included with this toolset"; 
