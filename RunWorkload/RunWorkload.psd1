@@ -30,7 +30,7 @@ Copyright = '2016'
 Description = 'Provides functions for generating a workload against a SQL Server instance'
 
 # Minimum version of the Windows PowerShell engine required by this module
-PowerShellVersion = '4.0'
+PowerShellVersion = '3.0'
 
 # Name of the Windows PowerShell host required by this module
 # PowerShellHostName = ''

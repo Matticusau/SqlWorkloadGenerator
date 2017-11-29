@@ -9,7 +9,7 @@
         --------------------------------------------------------------------------------------------------
         1.0.0.0      MLavery      05/05/2016     Initial Coding from existing scripts (Issue6)
         1.1.0.0      MLavery      09/11/2017     Better error handling and uses the SQL modules to load assemblies
-        
+        1.1.0.1      MLavery      29/11/2017     Dropped PowerShell requirement from v4.0 to v3.0 after some testing
 
         DISCLAIMER
         This Sample Code is provided for the purpose of illustration only and is not intended to be 
